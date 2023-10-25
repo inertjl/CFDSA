@@ -1,4 +1,4 @@
-FROM 21-alpine3.17
+FROM node:21-alpine
 
 WORKDIR /app
 
@@ -11,12 +11,12 @@ COPY views views
 
 RUN npm ci
 
-ENV PORT = 5000
-ENV INSTANCE_NAME = Task1
-ENV INSTANCE_HASH = abcd
+ENV PORT=5000
+ENV INSTANCE_NAME="Task1"
+ENV INSTANCE_HASH=abcd
 
 EXPOSE ${PORT}
 
-ENTRYPOINT node main.js ${PORT}
+ENTRYPOINT node main.js 
 
 

@@ -1,0 +1,35 @@
+---
+#Create namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bggns
+  labels:
+    app: bgg
+    kind: namespace
+
+---
+#Create Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bgg-config
+  namespace: bggns
+  labels:
+    app: bgg
+data:
+  BGG_DB_USER: root
+  BGG_DB_HOST: bggdb-svc.bggns.svc.cluster.local
+
+---
+#Create Secret for DB Password
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bgg-secret
+  namespace: bggns
+  labels:
+    app: bgg
+type: Opaque
+data:
+  DB_PASSWORD: Y2hhbmdlaXQ=

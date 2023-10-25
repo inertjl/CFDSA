@@ -1,0 +1,61 @@
+---
+#Create bgg App
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: bggapp-deploy
+  namespace: bggns
+  labels: 
+    app: bggapp
+spec:
+  replicas: 3
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: bggapp
+  template:
+    metadata: 
+      name: bggapp-po
+      labels: 
+        app: bggapp
+    spec:
+      containers:
+        - name: bggapp-container
+          image: stackupiss/bgg-backend:v2
+          imagePullPolicy: IfNotPresent
+          env: 
+          - name: BGG_DB_HOST
+            valueFrom:
+               configMapKeyRef:
+                name: bgg-config
+                key: BGG_DB_HOST
+          - name: BGG_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: bgg-secret
+                key: DB_PASSWORD
+          - name: BGG_DB_USER
+            valueFrom:
+              configMapKeyRef:
+                name: bgg-config
+                key: BGG_DB_USER
+          ports:
+          - name: bggapp-port
+            containerPort: 3000
+          livenessProbe:
+            httpGet: 
+              path: /healthz
+              port: 3000
+            timeoutSeconds: 3
+            periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: 
+              path: /healthz
+              port: 3000
+

@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+
+
+---
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: nginx-po
+  namespace: playground
+spec:
+  volumes:
+  - name: data-vol
+    emptyDir: {}
+  containers:
+  - name: nginx-container
+    image: nginx
+    imagePullPlicy: IfNotPresent
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: data-vol
+      mountPath: /usr/share/nginx/html
+

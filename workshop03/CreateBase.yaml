@@ -1,0 +1,37 @@
+---
+#Create name space
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: codeserverns
+  labels:
+    app: codeserver
+    kind: namespace
+
+---
+#Create Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cs-config
+  namespace: codeserverns
+  labels:
+    app: codeserver
+data:
+  TZ: Asia/Singapore
+  DEFAULT_WORKSPACE: /config/workspace
+  PROXY_DOMAIN: code-167.99.30.188.nip.io
+
+---
+#Create Secret for DB Password
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cs-secret
+  namespace: codeserverns
+  labels:
+    app: codeserver
+type: Opaque
+data:
+  SUDO_PASSWORD: cGFzc3dvcmQ=
+  PASSWORD: cGFzc3dvcmQ= 

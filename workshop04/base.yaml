@@ -1,0 +1,39 @@
+---
+#Create name space
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: minio-ns
+  labels:
+    app: minio
+    kind: namespace
+
+---
+#Create Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minio-config
+  namespace: minio-ns
+  labels:
+    app: minio
+data:
+  MINIO_ROOT_USER: root
+  MINIO_DOMAIN: minio-hsvc.minio-ns.svc.cluster.local
+  HOSTNAME: http://minio-sts-{0...3}.minio-hsvc.minio-ns.svc.cluster.local/data
+  MINIO_VOLUMES: /data
+  address: :9000
+  console-address: :9090
+  
+---
+#Create Secret for DB Password
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-secret
+  namespace: minio-ns
+  labels:
+    app: minio
+type: Opaque
+data:
+  MINIO_ROOT_PASSWORD: UGFzc3dvcmQ=
